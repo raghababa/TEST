@@ -2,9 +2,13 @@ package com.example.myapplication
 
 import android.app.job.JobParameters
 import android.app.job.JobService
+import android.content.Context
 import android.util.Log
 import kotlinx.coroutines.Job
-
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class UploadJobService : JobService() {
 
@@ -25,18 +29,35 @@ class UploadJobService : JobService() {
     }
 
     private var jobCanceled : Boolean = false
+//    private suspend fun doBackgroundWork1(params: JobParameters?, context: Context) = coroutineScope{
+//        launch {
+//            kotlin.run {
+//
+//                Log.d(TAG, "run: $$$$$$")
+//
+//                if (jobCanceled) {
+//                    return@run
+//                }
+//
+//                delay(1000L)
+//
+//                Log.d(TAG, "Job finish")
+//                jobFinished(params,false)
+//            }
+//        }
+//    }
    private fun doBackgroundWork(params: JobParameters?){
        Thread(Runnable {
            kotlin.run {
-               for (i: Int in 0 until 9) {
-                   Log.d(TAG, "run: $i")
+
+                   Log.d(TAG, "run: $$$$$$")
 
                    if (jobCanceled) {
                        return@run
                    }
 
                    Thread.sleep(1000L)
-               }
+
                Log.d(TAG, "Job finish")
                jobFinished(params,false)
            }
