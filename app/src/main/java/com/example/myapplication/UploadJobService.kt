@@ -14,55 +14,39 @@ class UploadJobService : JobService() {
 
     private val TAG = "TAG"
 
-    override fun onStartJob(params: JobParameters?): Boolean {
-        Log.d(TAG, "@@@@@@@Job started")
-        doBackgroundWork(params)
+    override fun onStartJob(params: JobParameters?): Boolean = runBlocking {
+
+        Log.d(TAG, "Job started")
+        doBackgroundWork1(params)
         // Returning true means the job is still running asynchronously
-        return true
+        return@runBlocking true
     }
 
+
     override fun onStopJob(params: JobParameters?): Boolean {
-        Log.d(TAG, "@@@@@@@@Job canceled before completion")
+        Log.d(TAG, "Job canceled before completion")
         jobCanceled = true
         // Returning true means the job should be rescheduled if it didn't complete
         return true
     }
 
     private var jobCanceled : Boolean = false
-//    private suspend fun doBackgroundWork1(params: JobParameters?, context: Context) = coroutineScope{
-//        launch {
-//            kotlin.run {
-//
-//                Log.d(TAG, "run: $$$$$$")
-//
-//                if (jobCanceled) {
-//                    return@run
-//                }
-//
-//                delay(1000L)
-//
-//                Log.d(TAG, "Job finish")
-//                jobFinished(params,false)
-//            }
-//        }
-//    }
-   private fun doBackgroundWork(params: JobParameters?){
-       Thread(Runnable {
-           kotlin.run {
+    private suspend fun doBackgroundWork1(params: JobParameters?) = coroutineScope{
+        launch {
 
-                   Log.d(TAG, "run: $$$$$$")
+                Log.d(TAG, "Logging a message!")
 
-                   if (jobCanceled) {
-                       return@run
-                   }
+                if (jobCanceled) {
+                    return@launch
+                }
 
-                   Thread.sleep(1000L)
+                delay(1000L)
 
-               Log.d(TAG, "Job finish")
-               jobFinished(params,false)
-           }
-       }).start()
-   }
+                Log.d(TAG, "Job finish")
+                jobFinished(params,false)
+        }
+    }
+
 }
 
 
